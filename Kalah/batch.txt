@@ -1,0 +1,4 @@
+SET teamname=TEAM_NAME_HERE
+javac -cp Kalah.jar algorithms/%teamname%.java
+java -cp Kalah.jar;. algorithms.%teamname%
+pause
