@@ -4,8 +4,8 @@ import org.gamelink.game.Algo;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class RNG extends Algo{ // Replace TeamName
-    private static String teamName = "RNG"; // Replace TeamName
+public class Algorithm1 extends Algo{ // Replace TeamName
+    private static String teamName = "Algorithm1"; // Replace TeamName
 
     public static String getTeamName(){
         return teamName;
@@ -13,7 +13,7 @@ public class RNG extends Algo{ // Replace TeamName
 
     public static void main(String[] args){
         Kalah game = new Kalah(false);
-        game.startGame(RNG.class); // Replace TeamName
+        game.startGame(Algorithm1.class); // Replace TeamName
     }
 
     public static String algorithm(Kalah game){  
