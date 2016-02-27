@@ -14,7 +14,7 @@ public class Jason {
 			printBoard(board);
 			System.out.println("Your turn:");
 			anotherTurn = true;
-
+			done = checkDone(board);
 			while (anotherTurn && !done) {
 				board = playMove(board, algorithm(board));
 				Thread.sleep(0000);
@@ -27,8 +27,8 @@ public class Jason {
 			}
 			printBoard(board);
 			System.out.println("Swapping board");
-			swapBoard();
-
+			board = swapBoard(board);
+			done = checkDone(board);
 			anotherTurn = true;
 			while (anotherTurn && !done) {
 				printBoard(board);
@@ -43,7 +43,7 @@ public class Jason {
 			}
 			printBoard(board);
 			System.out.println("Swapping board");
-			swapBoard();
+			board = swapBoard(board);
 
 		}
 		System.out.println("The game is done!");
@@ -93,7 +93,7 @@ public class Jason {
 	/**
 	 * Helper method to swap the opponent and the current players board.
 	 */
-	public static void swapBoard() {
+	public static int [][] swapBoard(int [][] board) {
 		int[] temp = new int[board[0].length];
 		for (int i = 0; i < temp.length; i++) {
 			temp[i] = board[0][i];
@@ -105,6 +105,7 @@ public class Jason {
 		for (int i = 0; i < board[0].length; i++) {
 			board[1][i] = temp[board[0].length - i - 1];
 		}
+		return board;
 
 	}
 
@@ -141,7 +142,33 @@ public class Jason {
 		}
 		return false;
 	}
-	
+
+	public static int [][] findWorstScenerio(int [][] board){
+		for(int i = board[0].length - 2; i > 0; i++){
+			if(!freeMove){
+				break;
+			}
+		}
+		int max = 0;
+		int move = 0;
+		ArrayList<Integer> moves = findMoves(board);
+		for(int k = 0; k < moves.size(); k++){
+			int [][] boardCopy = new int[2][8];
+			for (int i = 0; i < board.length; i++) {
+				for(int j = 0; j < board[0].length; j++) {
+					boardCopy[i][j] = board[i][j];
+				}
+			}
+			boardCopy = playMove(boardCopy,moves.get(k));
+			if(boardCopy[1][boardCopy.length -1] > max){
+				max = boardCopy[1][boardCopy.length -1];
+				move = moves.get(k);
+			}
+		}
+		if(moves.size() > 0)
+			board = playMove(board,move);
+		return board;
+	}
 	public static int heuristic(int [][] board, int move){
 		int [][] newBoard = playMove(board,move);
 		int value = 0;
@@ -152,6 +179,7 @@ public class Jason {
 			System.out.println("Sub-move: " + move);
 			return 10 + heuristic(newBoard, move);
 		} else {
+			board = swapBoard(findWorstScenerio(swapBoard(board)));
 			for(int i = 1; i < 7; i++) {
 				value += board[1][i];
 			}
