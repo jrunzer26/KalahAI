@@ -187,7 +187,7 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		// numStealbefore is just an approximation of the ones that
 		// the opponent could steal before
 		int[][] newBoard = playMove(copyBoard(board),move);
-		newBoard = flipBoard(newBoard);
+		newBoard = swapBoard(newBoard);
 		// play all free moves to make sure the spots are as open as possible
 		for (int i = newBoard[0].length - 2; i > 0; i++) {
 			if(newBoard[1][i] == newBoard[0].length - 1 - i){

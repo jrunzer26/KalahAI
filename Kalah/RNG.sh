@@ -1,4 +1,4 @@
-Teamname="Algorithm1"
+Teamname="RNG"
 rm algorithms/$Teamname.class
 javac -cp Kalah.jar algorithms/$Teamname.java
 if [ $1 == 1 ]; then
