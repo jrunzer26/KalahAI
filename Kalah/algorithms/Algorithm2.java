@@ -3,10 +3,11 @@ import org.gamelink.game.Kalah;
 import org.gamelink.game.Algo;
 import java.util.ArrayList;
 
-public class Algorithm1 extends Algo{ // Replace TeamName
-    private static String teamName = "Algorithm1"; // Replace TeamName
+public class Algorithm2 extends Algo{ // Replace TeamName
+    private static String teamName = "Algorithm2"; // Replace TeamName
 	static boolean freeMove = false;
 	static  int totalSeeds = 0;
+	static boolean stolen;
 	
     public static String getTeamName(){
         return teamName;
@@ -14,7 +15,7 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 
     public static void main(String[] args){
         Kalah game = new Kalah(false);
-        game.startGame(Algorithm1.class); // Replace TeamName
+        game.startGame(Algorithm2.class); // Replace TeamName
     }
 
     public static String algorithm(Kalah game){  
@@ -89,7 +90,7 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 					boardCopy[i][j] = board[i][j];
 				}
 			}
-			score.add(heuristic(boardCopy, move));
+			score.add(findTotalHeuristic(boardCopy, move));
 		}
 		int max = score.get(0);
 		int index = 0;
@@ -110,35 +111,7 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 		return false;
 	}
 	
-	public static int[][] findWorstScenerio(int[][] board) {
-		// play all free moves to make sure the spots are as open as possible
-		for (int i = board[0].length - 2; i > 0; i++) {
-			if(board[1][i] == board[0].length - 1 - i){
-				board = playMove(board,i);
-			} else {
-				break;
-			}
-		}
-		int max = 0;
-		int move = 0;
-		ArrayList<Integer> moves = findMoves(board);
-		for (int k = 0; k < moves.size(); k++) {
-			int[][] boardCopy = new int[2][8];
-			for (int i = 0; i < board.length; i++) {
-				for (int j = 0; j < board[0].length; j++) {
-					boardCopy[i][j] = board[i][j];
-				}
-			}
-			boardCopy = playMove(boardCopy, moves.get(k));
-			if (boardCopy[1][boardCopy.length - 1] > max) {
-				max = boardCopy[1][boardCopy.length - 1];
-				move = moves.get(k);
-			}
-		}
-		if (moves.size() > 0)
-			board = playMove(board, move);
-		return board;
-	}
+	
 	public static int [][] copyBoard (int [][] board){
 		int[][] boardCopy = new int[board.length][board[0].length];
 		for (int i = 0; i < board.length; i++) {
@@ -148,41 +121,77 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 		}
 		return boardCopy;
 	}
-	public static int heuristic(int[][] board, int move) {
-		int[][] newBoard = playMove(board, move);
+	public static int findTotalHeuristic(int[][] board, int move) {
 		int value = 0;
-		if (freeMove && !checkDone(newBoard)) {
-			freeMove = false;
-			System.out.println("Move: " + move);
-			move = findBestMove(copyBoard(newBoard));
-			System.out.println("Sub-move: " + move);
-			//return 10 + heuristic(newBoard, move);
-			return 6 + heuristic(copyBoard(newBoard),move);
-		} else {
-			//add to the heuristic value if the opponents moves will go into our houses
-			
-			//play the worst case the opponent can do with a steal
-			newBoard = swapBoard(findWorstScenerio(swapBoard(copyBoard(newBoard))));
-			for (int i = 1; i < 7; i++) {
-				value += newBoard[1][i] + 7 - i;
-			}
-			for (int i = 1; i < 7; i++) {
-				if(newBoard[0][i] - i > 0)
-					value += newBoard[0][i] - 1;
-			}
-			//value += 2 * newBoard[1][7];
-			value += 4 * (newBoard[1][7] - board[1][7]) + newBoard[1][7];
-			if(newBoard[0][7] > totalSeeds / 2){
-				value = 0;
-			}
-			value -= 2 * (newBoard[0][0] - board[0][0]) + newBoard[0][0];
-
-		}
-		System.out.println("move: " + move);
-		System.out.println("heuristic: " + value + "\n");
+		int temp = 0;
+		System.out.println("Examining move: " + move);
+		temp = freeMoveHeuristic(board,move);
+		value += temp;
+		System.out.println("Free move heuristic: " + temp);
+		temp = stealHeuristic(board,move);
+		value += temp;
+		System.out.println("Steal opponent's heuristic: " + temp);
+		temp = preventStealHeuristic(board,move);
+		value += temp;
+		System.out.println("Prevent Steal heuristic: " + temp);
 		return value;
 	}
-	
+
+	public static int freeMoveHeuristic(int[][] board, int move) {
+		freeMove = false;
+		int[][] newBoard = playMove(copyBoard(board), move);
+		int total = 0;
+		if (freeMove) {
+			ArrayList<Integer> moves = findMoves(newBoard);
+			for (int m : moves) {
+				total += freeMoveHeuristic(copyBoard(newBoard), m);
+			}
+			total += 1;
+		}
+		return total;
+	}
+
+	public static int stealHeuristic(int[][] board, int move) {
+		int storeBefore = board[1][7];
+		int[][] newBoard = playMove(copyBoard(board), move);
+		int storeAfter = newBoard[1][7];
+		if(storeAfter - storeBefore > 1)
+			return storeAfter - storeBefore;
+		else 
+			return 0;
+	}
+
+	public static int findNumOfSteals(int[][] board) {
+		board = swapBoard(board);
+		ArrayList<Integer> moves = findMoves(board);
+		int stealMoves = 0;
+		for (int m : moves) {
+			int[][] newBoard = playMove(copyBoard(board),m);
+			if (stolen)
+				stealMoves++;
+		}
+		return stealMoves;
+	}
+
+	/**
+	 * Returns the difference of number of steals the opponement could 
+	 *
+	*/
+	public static int preventStealHeuristic(int[][] board, int move) {
+		int numStealBefore = findNumOfSteals(copyBoard(board));
+		int[][] newBoard = playMove(copyBoard(board), move);
+		int numStealAfter = findNumOfSteals(copyBoard(board));
+		int difference = numStealBefore - numStealAfter;
+		if ( difference < 0)
+			return 0;
+		return difference;
+	}
+
+	public static int over19Heuristic(int[][] board, int move) {
+		//int[][] newBoard = playMove(copyBoard(board),
+		return 0;
+	}
+ 	
 	public static ArrayList<Integer> findMoves(int[][] board) {
 		ArrayList<Integer> moves = new ArrayList<Integer>();
 		for (int i = 1; i < 7; i++) {
@@ -206,6 +215,7 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 		board[1][move] = 0;
 		int currentIndex = move + 1;
 		freeMove = false;
+		stolen = false;
 
 		boolean right = true; // determines if we are still distributing the
 								// seeds in your houses
@@ -235,6 +245,7 @@ public class Algorithm1 extends Algo{ // Replace TeamName
 		}
 		if (right) { // steal the seeds from the opponent
 			if (board[1][currentIndex - 1] == 1 && board[0][currentIndex - 1] > 0) {
+				stolen = true;
 				board[1][board[0].length - 1] += board[1][currentIndex - 1];
 				board[1][currentIndex - 1] = 0;
 				board[1][board[0].length - 1] += board[0][currentIndex - 1];
