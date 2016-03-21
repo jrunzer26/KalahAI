@@ -121,6 +121,7 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		}
 		return boardCopy;
 	}
+
 	public static int findTotalHeuristic(int[][] board, int move) {
 		int value = 0;
 		int temp = 0;
@@ -134,6 +135,11 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		temp = preventStealHeuristic(board,move);
 		value += temp;
 		System.out.println("Prevent Steal heuristic: " + temp);
+		temp = over19Heuristic(board,move);
+		value += temp;
+		if (temp == -1)
+			value = 0;
+		System.out.println("Over 19 heuristic: " + temp);
 		return value;
 	}
 
@@ -174,22 +180,55 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 	}
 
 	/**
-	 * Returns the difference of number of steals the opponement could 
+	 * Returns the worst steal after the move
 	 *
 	*/
 	public static int preventStealHeuristic(int[][] board, int move) {
-		int numStealBefore = findNumOfSteals(copyBoard(board));
-		int[][] newBoard = playMove(copyBoard(board), move);
-		int numStealAfter = findNumOfSteals(copyBoard(board));
-		int difference = numStealBefore - numStealAfter;
-		if ( difference < 0)
-			return 0;
-		return difference;
+		// numStealbefore is just an approximation of the ones that
+		// the opponent could steal before
+		int[][] newBoard = playMove(copyBoard(board),move);
+		newBoard = flipBoard(newBoard);
+		// play all free moves to make sure the spots are as open as possible
+		for (int i = newBoard[0].length - 2; i > 0; i++) {
+			if(newBoard[1][i] == newBoard[0].length - 1 - i){
+				newBoard = playMove(board,i);
+			} else {
+				break;
+			}
+		}
+		ArrayList<Integer> moves = findMoves(newBoard);
+		int maxSteal = 0;
+		for (int m : moves) {
+			int oldStore = newBoard[1][7];
+			int[][] board2 = playMove(newBoard,m);
+			int newStore = board2[1][7];
+			int stolenSeeds = newStore - oldStore - 1;
+			if (stolenSeeds > 0 && stolenSeeds > maxSteal) {
+				maxSteal = stolenSeeds;
+			}
+		}
+		return - maxSteal;
 	}
 
 	public static int over19Heuristic(int[][] board, int move) {
-		//int[][] newBoard = playMove(copyBoard(board),
-		return 0;
+		int[][] newBoard = playMove(copyBoard(board), move);
+		int myControlSeeds = 0, opponentControlSeeds = 0;
+		newBoard = swapBoard(findWorstScenerio(swapBoard(copyBoard(newBoard))));
+		for (int i = 1; i < 7; i++) {
+			// approximation
+			if (7 - i >= newBoard[1][i])
+				myControlSeeds += 7 - i;
+			else
+				myControlSeeds += newBoard[1][i];
+		}
+		for (int i = 1; i < 7; i++) {
+			if(newBoard[0][i] - i > 0)
+				myControlSeeds += newBoard[0][i] - i;
+		}
+		if (myControlSeeds < 18) {
+			return -1;
+		}
+		return 1;
 	}
  	
 	public static ArrayList<Integer> findMoves(int[][] board) {
@@ -199,6 +238,36 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 				moves.add(i);
 		}
 		return moves;
+	}
+
+	public static int[][] findWorstScenerio(int[][] board) {
+		// play all free moves to make sure the spots are as open as possible
+		for (int i = board[0].length - 2; i > 0; i++) {
+			if(board[1][i] == board[0].length - 1 - i){
+				board = playMove(board,i);
+			} else {
+				break;
+			}
+		}
+		int max = 0;
+		int move = 0;
+		ArrayList<Integer> moves = findMoves(board);
+		for (int k = 0; k < moves.size(); k++) {
+			int[][] boardCopy = new int[2][8];
+			for (int i = 0; i < board.length; i++) {
+				for (int j = 0; j < board[0].length; j++) {
+					boardCopy[i][j] = board[i][j];
+				}
+			}
+			boardCopy = playMove(boardCopy, moves.get(k));
+			if (boardCopy[1][boardCopy.length - 1] > max) {
+				max = boardCopy[1][boardCopy.length - 1];
+				move = moves.get(k);
+			}
+		}
+		if (moves.size() > 0)
+			board = playMove(board, move);
+		return board;
 	}
 	
 	/**
@@ -250,7 +319,7 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 				board[1][currentIndex - 1] = 0;
 				board[1][board[0].length - 1] += board[0][currentIndex - 1];
 				board[0][currentIndex - 1] = 0;
-			}
+			} 
 		}
 		return board;
 	}

@@ -1,0 +1,9 @@
+*******************************************************
+CONFIG: Seeds = 3
+CONFIG: houses = 6
+CONFIG: TimeLimit = 30
+CONFIG: Display Board = true
+CONFIG: Time Delay = 0
+*******************************************************
+Please enter your player number (1 or 2): Address: 10.20.52.248
+Waiting for connection.....
