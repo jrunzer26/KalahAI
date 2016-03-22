@@ -125,10 +125,17 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 	public static int findTotalHeuristic(int[][] board, int move) {
 		int value = 0;
 		int temp = 0;
-		System.out.println("Examining move: " + move);
+		System.out.println("\n************ Examining move: " + move + " *******");
 		temp = freeMoveHeuristic(board,move);
 		value += temp;
 		System.out.println("Free move heuristic: " + temp);
+		int createdFreeMoves = possibleCreatedFreeMovesHeuristic(board,move);
+		if(temp >= 1 && createdFreeMoves > 0)
+			temp = createdFreeMoves - 1;
+		else
+			temp = createdFreeMoves;
+		value += temp;
+		System.out.println("Possible created free moves heuristic: " + temp);
 		temp = stealHeuristic(board,move);
 		value += temp;
 		System.out.println("Steal opponent's heuristic: " + temp);
@@ -140,6 +147,7 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		if (temp == -1)
 			value = 0;
 		System.out.println("Over 19 heuristic: " + temp);
+		System.out.println("**** Total heuristic : " + value +  " *******");
 		return value;
 	}
 
@@ -210,6 +218,7 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		return - maxSteal;
 	}
 
+
 	public static int over19Heuristic(int[][] board, int move) {
 		int[][] newBoard = playMove(copyBoard(board), move);
 		int myControlSeeds = 0, opponentControlSeeds = 0;
@@ -239,6 +248,25 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 		}
 		return moves;
 	}
+
+	public static int possibleCreatedFreeMovesHeuristic(int[][] board, int move) {
+		int[][] newBoard = playMove(copyBoard(board),move);
+		ArrayList<Integer> moves = findMoves(newBoard);
+		return findPossibleFreeMoves(newBoard).size();
+	}
+
+	public static ArrayList<Integer> findPossibleFreeMoves(int[][] board) {
+		int freeMoves = 0;
+		ArrayList<Integer> moves = findMoves(board);
+		ArrayList<Integer> possible = new ArrayList<Integer>();
+		for (int m : moves) {
+			if (freeMoveHeuristic(copyBoard(board), m) > 0)
+				possible.add(m);
+		}		
+		return possible;
+		
+	}
+
 
 	public static int[][] findWorstScenerio(int[][] board) {
 		// play all free moves to make sure the spots are as open as possible
