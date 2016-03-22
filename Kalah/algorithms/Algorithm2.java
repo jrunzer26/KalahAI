@@ -35,6 +35,8 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 				boardCopy[i][j] = board[i][j];
 			}
 		}
+		System.out.println("Board before:");
+		printBoard(board);
 		System.out.println("Playing move: " + move);
 		printBoard(playMove(boardCopy,move));
         return String.valueOf(move);
@@ -252,7 +254,10 @@ public class Algorithm2 extends Algo{ // Replace TeamName
 	public static int possibleCreatedFreeMovesHeuristic(int[][] board, int move) {
 		int[][] newBoard = playMove(copyBoard(board),move);
 		ArrayList<Integer> moves = findMoves(newBoard);
-		return findPossibleFreeMoves(newBoard).size();
+		int value = findPossibleFreeMoves(newBoard).size() - findPossibleFreeMoves(board).size();
+		if (value > 0)
+			return value;
+		return 0;
 	}
 
 	public static ArrayList<Integer> findPossibleFreeMoves(int[][] board) {

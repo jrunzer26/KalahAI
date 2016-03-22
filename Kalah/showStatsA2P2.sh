@@ -1,0 +1,23 @@
+#!/bin/bash
+Player1name="RNG"
+Player2name="Algorithm2"
+filename=$Player1name$Player2name
+stats=$(cat $filename.results)
+echo $stats
+
+player1=$(echo $stats | head -n1 | awk '{print $1;}')
+player2=$(echo $stats | head -n1 | awk '{print $2;}')
+
+while true; do 
+	sleep 3
+	stats=$(cat $filename.results)
+	player1=$(echo $stats | head -n1 | awk '{print $1;}')
+	player2=$(echo $stats | head -n1 | awk '{print $2;}')
+	total=$((player1 + player2))
+	echo "Total: $total"
+	p1stat=$(bc -l<<<"$player1/$total*100")
+	p2stat=$(bc -l<<<"$player2/$total*100")
+	echo "Player 1 wins: $player1 Win %: $p1stat"
+	echo "Player 2 wins: $player2 Win %: $p2stat"
+done
+
