@@ -163,10 +163,10 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 			//System.out.println("found winning solution");
 			for (int j = 0; j < 7; j++) {
 				value += newBoard[1][j];
-				//value -= newBoard[0][j];
+				value -= newBoard[0][j];
 			}
-			value += newBoard[1][7];
-			//value -= newBoard[0][0];
+			value +=  2 * newBoard[1][7];
+			value -= newBoard[0][0];
 			return value;
 		}
 		//i would loose :(
@@ -182,14 +182,11 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		}
 		*/
 		//offset for a winning board
-		/*
+		
  		if(newBoard[1][7] >= 19) {
 			value += newBoard[0][0];
-		}
-		if(newBoard[0][0] >= 19) {
-			value -= 6;
 		} 
-		*/
+		
 		
 		for (int i = 1; i < 7; i++) {
 			if (board[1][i] <= 7 - i)
@@ -203,7 +200,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		}
 		
 		value += newBoard[1][7] * 2 - newBoard[0][0];
-		value -= estimateTurnsLeft(newBoard);
+		//value -= estimateTurnsLeft(newBoard);
 		return value;
 	}
 
