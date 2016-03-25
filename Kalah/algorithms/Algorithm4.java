@@ -91,7 +91,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		ArrayList<Integer> moves = findMoves(board);
 		if (moves.size() == 1)
 			return moves.get(0);
-		ArrayList<Double> score = new ArrayList<Double>();
+		ArrayList<double[]> score = new ArrayList<double[]>();
 
 		for (int move : moves) {
 			int[][] boardCopy = new int[2][8];
@@ -102,12 +102,19 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 			}
 			score.add(findTotalHeuristic(boardCopy, move));
 		}
-		double max = score.get(0);
+		double max = score.get(0)[0];
 		int index = 0;
+		int winningMove = -1;
 		for (int i = 0; i < score.size(); i++) {
-			if (score.get(i) >= max) {
-				max = score.get(i);
+			if (score.get(i)[0] >= max) {
+				max = score.get(i)[0];
 				index = i;
+			}
+		}
+		for (int i = 0; i < score.size(); i++) {
+			if (score.get(i)[1] > 0.6) {
+				System.out.println("win :D");
+				return moves.get(i);
 			}
 		}
 		return moves.get(index);
@@ -132,56 +139,65 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		return boardCopy;
 	}
 
-	public static double findTotalHeuristic(int[][] board, int move) {
+	public static double[] findTotalHeuristic(int[][] board, int move) {
 		double value = 0;
-		double temp = 0;
+		double[] temp;
 		System.out.println("\n************ Examining move: " + move + " *******");
 		temp = search(copyBoard(board), move, 11, true); //set to 12
-		value += temp;
+		value += temp[0];
+		System.out.println(temp[1]);
 		System.out.println("Free move heuristic: " + temp);
 		System.out.println("**** Total heuristic : " + new DecimalFormat("#0.0000000000").format(value) + " *******");
-		return value;
+		return temp;
 	}
 
-	public static double getHeuristic(int[][] board, boolean myTurn) {
-		int value = 0;
+	public static double[] getHeuristic(int[][] board, boolean myTurn) {
+		double value = 0;
 		int[][] newBoard;
+		double[] a = new double[2];
 		//System.out.print(myTurn + " ");
 		if (!myTurn)
 			newBoard = swapBoard(board);
 		else
 			newBoard = board;
-		boolean done = false;
+				//i would loose :(
+		if(newBoard[0][0] >= 19){
+			//System.out.println("i would loose");
+			a[0] = 0;
+			a[1] = 0;
+			return a;
+		}
+		boolean theyAreDone = false;
 		for (int i = 1; i < 7; i++) {
 			if (!(newBoard[0][i] == 0))
 				break;
 			if(i == 6)
-				done = true;
+				theyAreDone = true;
 		}
-		if (done) {
+		boolean imDone = false;
+		for (int i = 1; i < 7; i++) {
+			if (!(newBoard[1][i] == 0))
+				break;
+			if(i == 6)
+				imDone = true;
+		}
+		if (theyAreDone || imDone) {
 			//System.out.print(myTurn + " ");
 			//System.out.println("found winning solution");
-			for (int j = 0; j < 7; j++) {
+			for (int j = 1; j < 7; j++) {
 				value += newBoard[1][j];
 				value -= newBoard[0][j];
 			}
-			value +=  2 * newBoard[1][7];
+			value +=  newBoard[1][7];
 			value -= newBoard[0][0];
-			return value;
-		}
-		//i would loose :(
-		if(newBoard[0][0] >= 19){
-			//System.out.println("i would loose");
-			return 0;
+			a[0] = value;
+			a[1] = 1;
+			//System.out.println(a[1]);
+			return a;
 		}
 		
-		//value = newBoard[1][7] - newBoard[0][0];
-		/*
-		for (int i = 1; i < 7; i++) {
-			value += newBoard[1][i];
-		}
-		*/
-		//offset for a winning board
+
+		
 		
  		if(newBoard[1][7] >= 19) {
 			value += newBoard[0][0];
@@ -201,7 +217,9 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		
 		value += newBoard[1][7] * 2 - newBoard[0][0];
 		//value -= estimateTurnsLeft(newBoard);
-		return value;
+		a[0] = value;
+		a[1] = 0;
+		return a;
 	}
 
 	public static int estimateTurnsLeft(int[][] board) {
@@ -212,7 +230,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		}
 		return turns;
 	}
-	public static double search(int[][]board, int move, int searchDepth, boolean myTurn) {
+	public static double[] search(int[][]board, int move, int searchDepth, boolean myTurn) {
 		int[][] newBoard = playMove(copyBoard(board),move);
 		if (searchDepth == 0) {
 			//System.out.println("move: " + move + " search depth: " + searchDepth + "myTurn : " + myTurn);
@@ -220,21 +238,33 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		} else {
 			ArrayList<Integer> moves = findMoves(newBoard);
 			if (moves.size() == 0) 
-				return 0;
-			ArrayList<Double> score = new ArrayList<Double>();
-			if (myTurn) {
-				int max = 0;
-				int average = 0;
+				//return 0;
+				return getHeuristic(newBoard,myTurn);
+			ArrayList<double[]> score = new ArrayList<double[]>();
+			double win = 1;
+			double winpercent = 0;
+			double[] a = new double[2];
+			if (myTurn) {				
+				double average = 0;
+				
 				for (int m : moves) {
 					score.add(search(copyBoard(newBoard), m, searchDepth - 1, freeMove));
 				}
-				for (double s : score) {
-					average += s;
+				for (double[] s : score) {
+					average += s[0];
+					//System.out.println(s[1]);
+					/*
+					if (s[1] != 1)
+						win = 0;
+					*/
+					winpercent += s[1];
 				}
-				average /= score.size();
-				return average;
+				average /= score.size() + 0.0;
+				winpercent /= score.size() +0.0;
+				a[0] = average;
+				a[1] = winpercent;
+				return a;
 			} else {
-				int min = 200;
 				double average = 0;
 				if (freeMove)
 					myTurn = false;
@@ -243,11 +273,21 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 				for (int m : moves) {
 					score.add(search(swapBoard(copyBoard(newBoard)), m, searchDepth - 1, myTurn));
 				}
-				for (double s : score) {
-					average += s;
+				for (double[] s : score) {
+					average += s[0];
+					//System.out.println(s[1]);
+					/*
+					if (s[1] != 1)
+						win = 0;
+					*/
+					winpercent += s[1];
 				}
-				average /= score.size() + 0.0;
-				return average;
+				//average /= score.size() + 0.0;
+				average = average / (score.size() + 0.0);
+				winpercent /= score.size() +0.0;
+				a[0] = average;
+				a[1] = winpercent;
+				return a;
 			}
 		}
 	}
