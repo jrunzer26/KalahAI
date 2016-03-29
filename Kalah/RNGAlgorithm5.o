@@ -1,0 +1,81 @@
+*******************************************************
+CONFIG: Seeds = 3
+CONFIG: houses = 6
+CONFIG: TimeLimit = 30
+CONFIG: Display Board = true
+CONFIG: Time Delay = 0
+*******************************************************
+Please enter your player number (1 or 2): Please enter the address of your opponent. Example: 10.20.12.169
+Attemping to connect to host 10.20.52.47
+Connection successful
+Starting Game
+Opponent moved: 3
+   0   4   4   4   0   3   3   0
+   0   3   3   3   3   3   3   0
+
+
+************ Examining move: 1 *******
+1.953116222993827E-4
+Free move heuristic: [D@27278729
+**** Total heuristic : -3.8261424654 *******
+
+************ Examining move: 2 *******
+2.595722646604938E-4
+Free move heuristic: [D@42e3a004
+**** Total heuristic : -3.9576817161 *******
+
+************ Examining move: 3 *******
+1.5749790380658436E-4
+Free move heuristic: [D@31cfd987
+**** Total heuristic : -3.9580592063 *******
+
+************ Examining move: 4 *******
+3.41732114840535E-4
+Free move heuristic: [D@4f599d2
+**** Total heuristic : -4.2314009010 *******
+
+************ Examining move: 5 *******
+6.187688078703704E-4
+Free move heuristic: [D@364ee37d
+**** Total heuristic : -4.1162201779 *******
+
+************ Examining move: 6 *******
+2.1494593492798352E-4
+Free move heuristic: [D@c4437d3
+**** Total heuristic : -4.0594961830 *******
+You moved: 1
+Board before:
+   0   4   4   4   0   3   3   0
+   0   3   3   3   3   3   3   0
+
+Playing move: 1
+   0   4   4   4   0   3   3   0
+   0   0   4   4   4   3   3   0
+
+You moved: 1
+Opponent moved: 2
+   0   4   5   5   1   0   3   0
+   0   0   4   4   4   3   3   0
+
+
+************ Examining move: 2 *******
+0.002027696928583676
+Free move heuristic: [D@6e9ba4a9
+**** Total heuristic : -3.5933399994 *******
+
+************ Examining move: 3 *******
+0.0016265510063014402
+Free move heuristic: [D@16442f86
+**** Total heuristic : -3.8520508486 *******
+
+************ Examining move: 4 *******
+0.0012810345498971193
+Free move heuristic: [D@371f654d
+**** Total heuristic : -3.8651319339 *******
+
+************ Examining move: 5 *******
+0.0018046246768904325
+Free move heuristic: [D@7c508204
+**** Total heuristic : -4.0087830953 *******
+
+************ Examining move: 6 *******

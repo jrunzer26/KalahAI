@@ -1,0 +1,541 @@
+*******************************************************
+CONFIG: Seeds = 3
+CONFIG: houses = 6
+CONFIG: TimeLimit = 30
+CONFIG: Display Board = true
+CONFIG: Time Delay = 0
+*******************************************************
+Please enter your player number (1 or 2): Address: 10.10.127.170
+Waiting for connection.....
+Connection successful
+Starting Game
+   0   3   3   3   3   3   3   0
+   0   3   3   3   3   3   3   0
+
+You moved: 6
+Board before:
+   0   3   3   3   3   3   3   0
+   0   3   3   3   3   3   3   0
+
+Playing move: 6
+   0   3   3   3   3   4   4   0
+   0   3   3   3   3   3   0   1
+
+You moved: 6
+Opponent moved: 6
+   1   0   3   3   3   4   4   0
+   0   4   4   3   3   3   0   1
+
+
+************ Examining move: 1 *******
+-5
+Free move heuristic: -5
+**** Total heuristic : -5.0000000000 *******
+
+************ Examining move: 2 *******
+1
+Free move heuristic: 1
+**** Total heuristic : 1.0000000000 *******
+
+************ Examining move: 3 *******
+1
+Free move heuristic: 1
+**** Total heuristic : 1.0000000000 *******
+
+************ Examining move: 4 *******
+7
+Free move heuristic: 7
+**** Total heuristic : 7.0000000000 *******
+
+************ Examining move: 5 *******
+-12
+Free move heuristic: -12
+**** Total heuristic : -12.0000000000 *******
+You moved: 4
+Board before:
+   1   0   3   3   3   4   4   0
+   0   4   4   3   3   3   0   1
+
+Playing move: 4
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   1   2
+
+You moved: 4
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   1   2
+
+
+************ Examining move: 1 *******
+-3
+Free move heuristic: -3
+**** Total heuristic : -3.0000000000 *******
+
+************ Examining move: 2 *******
+-12
+Free move heuristic: -12
+**** Total heuristic : -12.0000000000 *******
+
+************ Examining move: 3 *******
+-12
+Free move heuristic: -12
+**** Total heuristic : -12.0000000000 *******
+
+************ Examining move: 5 *******
+-18
+Free move heuristic: -18
+**** Total heuristic : -18.0000000000 *******
+
+************ Examining move: 6 *******
+6
+Free move heuristic: 6
+**** Total heuristic : 6.0000000000 *******
+You moved: 6
+Board before:
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   1   2
+
+Playing move: 6
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   0   3
+
+You moved: 6
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   0   3
+
+
+************ Examining move: 1 *******
+-1
+Free move heuristic: -1
+**** Total heuristic : -1.0000000000 *******
+
+************ Examining move: 2 *******
+5
+Free move heuristic: 5
+**** Total heuristic : 5.0000000000 *******
+
+************ Examining move: 3 *******
+5
+Free move heuristic: 5
+**** Total heuristic : 5.0000000000 *******
+
+************ Examining move: 5 *******
+-16
+Free move heuristic: -16
+**** Total heuristic : -16.0000000000 *******
+You moved: 3
+Board before:
+   1   0   3   3   3   4   4   0
+   0   4   4   3   0   4   0   3
+
+Playing move: 3
+   1   0   3   3   3   4   0   0
+   0   4   4   0   1   5   0   8
+
+You moved: 3
+Opponent moved: 5
+   2   1   0   3   3   4   0   0
+   0   5   4   0   1   5   0   8
+
+
+************ Examining move: 1 *******
+6
+Free move heuristic: 6
+**** Total heuristic : 6.0000000000 *******
+
+************ Examining move: 2 *******
+-6
+Free move heuristic: -6
+**** Total heuristic : -6.0000000000 *******
+
+************ Examining move: 4 *******
+-6
+Free move heuristic: -6
+**** Total heuristic : -6.0000000000 *******
+
+************ Examining move: 5 *******
+-16
+Free move heuristic: -16
+**** Total heuristic : -16.0000000000 *******
+You moved: 1
+Board before:
+   2   1   0   3   3   4   0   0
+   0   5   4   0   1   5   0   8
+
+Playing move: 1
+   2   1   0   3   3   4   0   0
+   0   0   5   1   2   6   1   8
+
+You moved: 1
+Opponent moved: 4
+Opponent moved: 6
+   4   0   1   0   3   4   0   0
+   0   1   5   1   2   6   1   8
+
+
+************ Examining move: 1 *******
+8
+Free move heuristic: 8
+**** Total heuristic : 8.0000000000 *******
+
+************ Examining move: 2 *******
+20
+Free move heuristic: 20
+**** Total heuristic : 20.0000000000 *******
+
+************ Examining move: 3 *******
+4
+Free move heuristic: 4
+**** Total heuristic : 4.0000000000 *******
+
+************ Examining move: 4 *******
+4
+Free move heuristic: 4
+**** Total heuristic : 4.0000000000 *******
+
+************ Examining move: 5 *******
+-14
+Free move heuristic: -14
+**** Total heuristic : -14.0000000000 *******
+
+************ Examining move: 6 *******
+29
+Free move heuristic: 29
+**** Total heuristic : 29.0000000000 *******
+You moved: 6
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   5   1   2   6   1   8
+
+Playing move: 6
+   4   0   1   0   3   4   0   0
+   0   1   5   1   2   6   0   9
+
+You moved: 6
+   4   0   1   0   3   4   0   0
+   0   1   5   1   2   6   0   9
+
+
+************ Examining move: 1 *******
+10
+Free move heuristic: 10
+**** Total heuristic : 10.0000000000 *******
+
+************ Examining move: 2 *******
+28
+Free move heuristic: 28
+**** Total heuristic : 28.0000000000 *******
+
+************ Examining move: 3 *******
+6
+Free move heuristic: 6
+**** Total heuristic : 6.0000000000 *******
+
+************ Examining move: 4 *******
+6
+Free move heuristic: 6
+**** Total heuristic : 6.0000000000 *******
+
+************ Examining move: 5 *******
+-12
+Free move heuristic: -12
+**** Total heuristic : -12.0000000000 *******
+You moved: 2
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   5   1   2   6   0   9
+
+Playing move: 2
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   1  10
+
+You moved: 2
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   1  10
+
+
+************ Examining move: 1 *******
+18
+Free move heuristic: 18
+**** Total heuristic : 18.0000000000 *******
+
+************ Examining move: 3 *******
+8
+Free move heuristic: 8
+**** Total heuristic : 8.0000000000 *******
+
+************ Examining move: 4 *******
+21
+Free move heuristic: 21
+**** Total heuristic : 21.0000000000 *******
+
+************ Examining move: 5 *******
+-12
+Free move heuristic: -12
+**** Total heuristic : -12.0000000000 *******
+
+************ Examining move: 6 *******
+27
+Free move heuristic: 27
+**** Total heuristic : 27.0000000000 *******
+You moved: 6
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   1  10
+
+Playing move: 6
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   0  11
+
+You moved: 6
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   0  11
+
+
+************ Examining move: 1 *******
+20
+Free move heuristic: 20
+**** Total heuristic : 20.0000000000 *******
+
+************ Examining move: 3 *******
+10
+Free move heuristic: 10
+**** Total heuristic : 10.0000000000 *******
+
+************ Examining move: 4 *******
+26
+Free move heuristic: 26
+**** Total heuristic : 26.0000000000 *******
+
+************ Examining move: 5 *******
+-10
+Free move heuristic: -10
+**** Total heuristic : -10.0000000000 *******
+You moved: 4
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   0   2   3   7   0  11
+
+Playing move: 4
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   1  12
+
+You moved: 4
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   1  12
+
+
+************ Examining move: 1 *******
+22
+Free move heuristic: 22
+**** Total heuristic : 22.0000000000 *******
+
+************ Examining move: 3 *******
+12
+Free move heuristic: 12
+**** Total heuristic : 12.0000000000 *******
+
+************ Examining move: 5 *******
+-10
+Free move heuristic: -10
+**** Total heuristic : -10.0000000000 *******
+
+************ Examining move: 6 *******
+25
+Free move heuristic: 25
+**** Total heuristic : 25.0000000000 *******
+You moved: 6
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   1  12
+
+Playing move: 6
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   0  13
+
+You moved: 6
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   0  13
+
+
+************ Examining move: 1 *******
+24
+Free move heuristic: 24
+**** Total heuristic : 24.0000000000 *******
+
+************ Examining move: 3 *******
+14
+Free move heuristic: 14
+**** Total heuristic : 14.0000000000 *******
+
+************ Examining move: 5 *******
+-8
+Free move heuristic: -8
+**** Total heuristic : -8.0000000000 *******
+You moved: 1
+Board before:
+   4   0   1   0   3   4   0   0
+   0   1   0   2   0   8   0  13
+
+Playing move: 1
+   4   0   0   0   3   4   0   0
+   0   0   0   2   0   8   0  15
+
+You moved: 1
+Opponent moved: 2
+   4   1   1   1   4   0   0   0
+   0   0   0   2   0   8   0  15
+
+
+************ Examining move: 3 *******
+12
+Free move heuristic: 12
+**** Total heuristic : 12.0000000000 *******
+
+************ Examining move: 5 *******
+21
+Free move heuristic: 21
+**** Total heuristic : 21.0000000000 *******
+You moved: 5
+Board before:
+   4   1   1   1   4   0   0   0
+   0   0   0   2   0   8   0  15
+
+Playing move: 5
+   4   2   2   2   5   1   1   0
+   0   0   0   2   0   0   1  16
+
+You moved: 5
+Opponent moved: 5
+Opponent moved: 1
+   5   3   0   2   5   2   0   0
+   0   0   0   2   0   0   1  16
+
+
+************ Examining move: 3 *******
+30
+Free move heuristic: 30
+**** Total heuristic : 30.0000000000 *******
+
+************ Examining move: 6 *******
+38
+Free move heuristic: 38
+**** Total heuristic : 38.0000000000 *******
+You moved: 6
+Board before:
+   5   3   0   2   5   2   0   0
+   0   0   0   2   0   0   1  16
+
+Playing move: 6
+   5   3   0   2   5   2   0   0
+   0   0   0   2   0   0   0  17
+
+You moved: 6
+   5   3   0   2   5   2   0   0
+   0   0   0   2   0   0   0  17
+
+You moved: 3
+Board before:
+   5   3   0   2   5   2   0   0
+   0   0   0   2   0   0   0  17
+
+Playing move: 3
+   5   3   0   2   5   0   0   0
+   0   0   0   0   1   0   0  20
+
+You moved: 3
+Opponent moved: 3
+   6   4   1   3   0   0   0   0
+   0   1   0   0   1   0   0  20
+
+
+************ Examining move: 1 *******
+46
+Free move heuristic: 46
+**** Total heuristic : 46.0000000000 *******
+
+************ Examining move: 4 *******
+28
+Free move heuristic: 28
+**** Total heuristic : 28.0000000000 *******
+You moved: 1
+Board before:
+   6   4   1   3   0   0   0   0
+   0   1   0   0   1   0   0  20
+
+Playing move: 1
+   6   4   0   3   0   0   0   0
+   0   0   0   0   1   0   0  22
+
+You moved: 1
+Opponent moved: 6
+   7   0   0   3   0   0   0   0
+   0   1   1   1   1   0   0  22
+
+
+************ Examining move: 1 *******
+41
+Free move heuristic: 41
+**** Total heuristic : 41.0000000000 *******
+
+************ Examining move: 2 *******
+37
+Free move heuristic: 37
+**** Total heuristic : 37.0000000000 *******
+
+************ Examining move: 3 *******
+37
+Free move heuristic: 37
+**** Total heuristic : 37.0000000000 *******
+
+************ Examining move: 4 *******
+37
+Free move heuristic: 37
+**** Total heuristic : 37.0000000000 *******
+You moved: 1
+Board before:
+   7   0   0   3   0   0   0   0
+   0   1   1   1   1   0   0  22
+
+Playing move: 1
+   7   0   0   3   0   0   0   0
+   0   0   2   1   1   0   0  22
+
+You moved: 1
+Opponent moved: 4
+Opponent moved: 5
+   8   2   0   0   0   0   0   0
+   0   0   2   1   1   0   0  22
+
+
+************ Examining move: 2 *******
+42
+Free move heuristic: 42
+**** Total heuristic : 42.0000000000 *******
+
+************ Examining move: 3 *******
+42
+Free move heuristic: 42
+**** Total heuristic : 42.0000000000 *******
+
+************ Examining move: 4 *******
+42
+Free move heuristic: 42
+**** Total heuristic : 42.0000000000 *******
+You moved: 4
+Board before:
+   8   2   0   0   0   0   0   0
+   0   0   2   1   1   0   0  22
+
+Playing move: 4
+   8   2   0   0   0   0   0   0
+   0   0   2   1   0   1   0  22
+
+You moved: 4
+Opponent moved: 6
+***************
+GAMEOVER
+Final Score: 
+Player1: 27
+PLayer2: 9
+Player 1 wins
+***************

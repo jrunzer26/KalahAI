@@ -3,8 +3,8 @@ import org.gamelink.game.Kalah;
 import org.gamelink.game.Algo;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
-public class Algorithm4 extends Algo{ // Replace TeamName
-    private static String teamName = "Algorithm4"; // Replace TeamName
+public class Algorithm5 extends Algo{ // Replace TeamName
+    private static String teamName = "Algorithm5"; // Replace TeamName
 	static boolean freeMove = false;
 	static  int totalSeeds = 0;
 	static boolean stolen;
@@ -16,7 +16,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 
     public static void main(String[] args){
         Kalah game = new Kalah(false);
-        game.startGame(Algorithm4.class); // Replace TeamName
+        game.startGame(Algorithm5.class); // Replace TeamName
     }
 
     public static String algorithm(Kalah game){  
@@ -147,7 +147,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		double value = 0;
 		double[] temp;
 		System.out.println("\n************ Examining move: " + move + " *******");
-		temp = search(copyBoard(board), move, 11, true); //set to 12
+		temp = search(copyBoard(board), move, 10, true); //set to 12
 		value += temp[0];
 		System.out.println(temp[1]);
 		System.out.println("Free move heuristic: " + temp);
@@ -175,7 +175,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 
 	
 
-	public static double[] getHeuristic(int[][] board, boolean myTurn) {
+	public static double[] getHeuristic(int[][] board, boolean myTurn, boolean done) {
 		double value = 0;
 		int[][] newBoard;
 		double[] a = new double[2];
@@ -185,33 +185,24 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 			newBoard = swapBoard(copyBoard(board));
 		else
 			newBoard = board;
-		boolean theyAreDone = false;
-		for (int i = 1; i < 7; i++) {
-			if (!(newBoard[0][i] == 0))
-				break;
-			if(i == 6)
-				theyAreDone = true;
-		}
-		boolean imDone = false;
-		for (int i = 1; i < 7; i++) {
-			if (!(newBoard[1][i] == 0))
-				break;
-			if(i == 6)
-				imDone = true;
-		}
-		if (theyAreDone || imDone) {
+		if (done) {
 			for (int j = 1; j < 7; j++) {
 				value += newBoard[1][j];
+				value -= newBoard[0][j];
 			}
 			value +=  newBoard[1][7];
-			a[0] = value;
-			a[1] = 1;
+			value -= newBoard[0][0];
+			a[0] = 2 * value;
+			if(value > 0)
+				a[1] = 1;
+			else
+				a[1] = 0;
 			return a;
 		}
 		if( board[1][7] < 19) {
-			a[0] += 1.5 * howFarAhead(newBoard);
-			a[0] +=  2 * howCloseToWin(newBoard);
-			a[0] += howCloseToLoss(newBoard);
+			a[0] += 0.5 * howFarAhead(newBoard);
+			a[0] +=  0.75 * howCloseToWin(newBoard);
+			a[0] += 0.5 * howCloseToLoss(newBoard);
 		}
 		else {
 			a[0] = 20;
@@ -223,38 +214,44 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 	public static double[] search(int[][]board, int move, int searchDepth, boolean myTurn) {
 		int[][] newBoard = playMove(copyBoard(board),move);
 		if (searchDepth == 0) {
-			return getHeuristic(newBoard, myTurn);
+			return getHeuristic(newBoard, myTurn, false);
 		} else {
-			ArrayList<Integer> moves = findMoves(newBoard);
-			if (moves.size() == 0) 
-				return getHeuristic(newBoard, myTurn);
+			ArrayList<Integer> moves;
+
 			ArrayList<double[]> score = new ArrayList<double[]>();
 			double win = 1;
 			double winpercent = 0;
 			double average = 0;
 			double[] a = new double[2];
-			if (myTurn) {				
+			if (myTurn) {
+				if(!freeMove) {
+					newBoard = swapBoard(newBoard);
+				}
+				moves = findMoves(newBoard);
+				if (moves.size() == 0) 
+					return getHeuristic(newBoard, freeMove, true);			
 				for (int m : moves) {
-					if(newBoard[0][0] < 19)
+					if( (freeMove && newBoard[0][0] < 19 ) || !freeMove && newBoard[1][7] < 19)
 						score.add(search(copyBoard(newBoard), m, searchDepth - 1, freeMove));
 					else {
-						a[0] = -20;
-						a[1] = 0;
-						score.add(a);
+						score.add(getHeuristic(newBoard, freeMove, false));
 					}
 				}
 			} else {
 				if (freeMove)
 					myTurn = false;
-				else
+				else {
 					myTurn = true;
+					newBoard = swapBoard(newBoard);
+				}
+				moves = findMoves(newBoard);
+				if (moves.size() == 0) 
+					return getHeuristic(newBoard, myTurn, true);
 				for (int m : moves) {
-					if(newBoard[1][7] < 19)
-						score.add(search(swapBoard(copyBoard(newBoard)), m, searchDepth - 1, myTurn));
+					if( (!myTurn && newBoard[1][7] < 19) || (myTurn && newBoard[0][0] < 19))
+						score.add(search(copyBoard(newBoard), m, searchDepth - 1, myTurn));
 					else {
-						a[0] = -20;
-						a[1] = 0;
-						score.add(a);
+						score.add(getHeuristic(newBoard, freeMove, false));
 					}
 				}
 			}

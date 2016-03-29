@@ -3,8 +3,8 @@ import org.gamelink.game.Kalah;
 import org.gamelink.game.Algo;
 import java.util.ArrayList;
 import java.text.DecimalFormat;
-public class Algorithm4 extends Algo{ // Replace TeamName
-    private static String teamName = "Algorithm4"; // Replace TeamName
+public class Algorithm6 extends Algo{ // Replace TeamName
+    private static String teamName = "Algorithm6"; // Replace TeamName
 	static boolean freeMove = false;
 	static  int totalSeeds = 0;
 	static boolean stolen;
@@ -16,7 +16,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 
     public static void main(String[] args){
         Kalah game = new Kalah(false);
-        game.startGame(Algorithm4.class); // Replace TeamName
+        game.startGame(Algorithm6.class); // Replace TeamName
     }
 
     public static String algorithm(Kalah game){  
@@ -30,6 +30,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		printBoard(board);
 		int move = findBestMove(board);
 		System.out.println("You moved: " + move);
+		
 		int[][] boardCopy = new int[2][8];
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
@@ -90,37 +91,38 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 	 */
 	public static int findBestMove(int[][] board) {
 		ArrayList<Integer> moves = findMoves(board);
+
+		boolean playLast = true;
+		for (int i = 1; i < 7; i++) {
+			if((board[0][i] != 3) || (board[1][i] != 3))
+				playLast = false;
+				
+		}
+		if(playLast)
+			return moves.get(moves.size() -1);
 		if (moves.size() == 1)
 			return moves.get(0);
-		ArrayList<double[]> score = new ArrayList<double[]>();
+		ArrayList<Integer> score = new ArrayList<Integer>();
 
 		for (int move : moves) {
-			int[][] boardCopy = new int[2][8];
-			for (int i = 0; i < board.length; i++) {
-				for (int j = 0; j < board[0].length; j++) {
-					boardCopy[i][j] = board[i][j];
-				}
-			}
+			int[][] boardCopy = copyBoard(board);
 			score.add(findTotalHeuristic(boardCopy, move));
 		}
-		double max = score.get(0)[0];
+		int max = score.get(0);
 		int index = 0;
 		int maxWinIndex = 0;
 		double maxWin = 0;
 		int winningMove = -1;
 		for (int i = 0; i < score.size(); i++) {
-			if (score.get(i)[1] > maxWin) {
-				maxWin = score.get(i)[1];
+			if (score.get(i) > maxWin) {
+				maxWin = score.get(i);
 				maxWinIndex = i;
 			}
-			if (score.get(i)[0] >= max) {
-				max = score.get(i)[0];
+			if (score.get(i) >= max) {
+				max = score.get(i);
 				index = i;
 			}
 		}
-
-		if( maxWin >= 0.8)
-			return moves.get(maxWinIndex);
 		return moves.get(index);
 	}
 	
@@ -143,13 +145,13 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		return boardCopy;
 	}
 
-	public static double[] findTotalHeuristic(int[][] board, int move) {
-		double value = 0;
-		double[] temp;
+	public static int findTotalHeuristic(int[][] board, int move) {
+		int value = 0;
+		int temp;
 		System.out.println("\n************ Examining move: " + move + " *******");
-		temp = search(copyBoard(board), move, 11, true); //set to 12
-		value += temp[0];
-		System.out.println(temp[1]);
+		temp = freeMoveHeuristic(board,move, true, 1); //set to 12
+		value += temp;
+		System.out.println(temp);
 		System.out.println("Free move heuristic: " + temp);
 		System.out.println("**** Total heuristic : " + new DecimalFormat("#0.0000000000").format(value) + " *******");
 		return temp;
@@ -160,7 +162,7 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		System.out.println();
 	}
 
-	public static double howCloseToWin(int[][] board) {
+	public static int howCloseToWin(int[][] board) {
 		int value = board[1][7] - 19;
 		return value;
 	}
@@ -169,108 +171,87 @@ public class Algorithm4 extends Algo{ // Replace TeamName
 		int value = 19 - board[0][0];
 		return value;
 	}
-	public static double howFarAhead(int[][] board) {
+	public static int howFarAhead(int[][] board) {
 		return (board[1][7] - board[0][0]);
 	}
 
-	
-
-	public static double[] getHeuristic(int[][] board, boolean myTurn) {
-		double value = 0;
-		int[][] newBoard;
-		double[] a = new double[2];
-		boolean print = false;
-		//System.out.print(myTurn + " ");
-		if (!myTurn)
-			newBoard = swapBoard(copyBoard(board));
-		else
-			newBoard = board;
-		boolean theyAreDone = false;
-		for (int i = 1; i < 7; i++) {
-			if (!(newBoard[0][i] == 0))
-				break;
-			if(i == 6)
-				theyAreDone = true;
-		}
-		boolean imDone = false;
-		for (int i = 1; i < 7; i++) {
-			if (!(newBoard[1][i] == 0))
-				break;
-			if(i == 6)
-				imDone = true;
-		}
-		if (theyAreDone || imDone) {
-			for (int j = 1; j < 7; j++) {
-				value += newBoard[1][j];
-			}
-			value +=  newBoard[1][7];
-			a[0] = value;
-			a[1] = 1;
-			return a;
-		}
-		if( board[1][7] < 19) {
-			a[0] += 1.5 * howFarAhead(newBoard);
-			a[0] +=  2 * howCloseToWin(newBoard);
-			a[0] += howCloseToLoss(newBoard);
-		}
-		else {
-			a[0] = 20;
-			a[1] = 1;
-		}
-		return a;
-	}
-
-	public static double[] search(int[][]board, int move, int searchDepth, boolean myTurn) {
-		int[][] newBoard = playMove(copyBoard(board),move);
-		if (searchDepth == 0) {
-			return getHeuristic(newBoard, myTurn);
-		} else {
+	public static int freeMoveHeuristic(int[][] board, int move, boolean myTurn, int depth) {
+		freeMove = false;
+		int[][] newBoard = playMove(copyBoard(board), move);
+		int total = 0;
+		int max = -200;
+		if (freeMove) {
 			ArrayList<Integer> moves = findMoves(newBoard);
-			if (moves.size() == 0) 
-				return getHeuristic(newBoard, myTurn);
-			ArrayList<double[]> score = new ArrayList<double[]>();
-			double win = 1;
-			double winpercent = 0;
-			double average = 0;
-			double[] a = new double[2];
-			if (myTurn) {				
-				for (int m : moves) {
-					if(newBoard[0][0] < 19)
-						score.add(search(copyBoard(newBoard), m, searchDepth - 1, freeMove));
-					else {
-						a[0] = -20;
-						a[1] = 0;
-						score.add(a);
-					}
-				}
-			} else {
-				if (freeMove)
-					myTurn = false;
-				else
-					myTurn = true;
-				for (int m : moves) {
-					if(newBoard[1][7] < 19)
-						score.add(search(swapBoard(copyBoard(newBoard)), m, searchDepth - 1, myTurn));
-					else {
-						a[0] = -20;
-						a[1] = 0;
-						score.add(a);
-					}
-				}
+			for (int m : moves) {
+				int value = 1 + freeMoveHeuristic(copyBoard(newBoard), m, true, depth);
+				if (value > max)
+					max = value;
 			}
-			for (double[] s : score) {
-				average += s[0];
-				winpercent += s[1];
+		} else {
+			int doneTotal = 0;
+			doneTotal += stealHeuristic(newBoard, board);
+			doneTotal += howFarAhead(newBoard);
+			if(howCloseToWin(newBoard) >= 0)
+				doneTotal += 5 * howCloseToWin(newBoard);
+			depth--;
+			if (depth >= 0) {
+				newBoard = swapBoard(newBoard);
+				ArrayList<Integer> moves = findMoves(newBoard);
+				//if(moves.size() == 0)
+				int theirMax = -100;
+				for (int m : moves) {
+					int value = freeMoveHeuristic(copyBoard(newBoard), m, true, depth);
+					if (value > theirMax)
+						theirMax = value;
+				}
+				doneTotal -= theirMax;
 			}
-			average /= score.size() + 0.0;
-			winpercent /= score.size() + 0.0;
-			a[0] = average;
-			a[1] = winpercent;
-			return a;
+			if (doneTotal > max)
+				max = doneTotal;
 		}
+		return max;
 	}
 
+	public static int stealHeuristic(int[][] board, int[][] oldBoard) {
+		if (board[1][7] - oldBoard[1][7] > 1)
+			return board[1][7] - oldBoard[1][7];
+		else
+			return 0;
+	}
 
+	public static int doneHeuristic(int[][] board, int move, boolean myTurn) {
+		int[][] newBoard;
+		if (myTurn)
+			newBoard = playMove(copyBoard(board), move);
+		else {
+			newBoard = playMove(swapBoard(copyBoard(board)), move);
+			newBoard = swapBoard(newBoard);
+		}
+		int total = 0;
+		boolean theyAreDone = true;
+		boolean imDone = true;
+		for (int i = 1; i < 7; i++) {
+			if (newBoard[0][i] != 0) {
+				theyAreDone = false;
+				break;
+			}
+		}
+		for (int i = 1; i < 7; i++) {
+			if (newBoard[1][i] != 0) {
+				imDone = false;
+				break;
+			}
+		}
+
+		if (theyAreDone || imDone) {
+			for (int i = 0; i < newBoard[0].length; i++) {
+				total += newBoard[1][i];
+				total -= newBoard[0][i];
+			}
+		}
+		return total;
+		
+	}
 	
 	/**
 	 * Plays a move and returns the new board
