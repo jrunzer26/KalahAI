@@ -128,10 +128,10 @@ public class Algorithm6 extends Algo{ // Replace TeamName
 	
 	public static boolean checkDone(int[][] board) {
 		for (int i = 1; i < 7; i++) {
-			if (board[1][i] > 0)
-				return true;
+			if (board[1][i] != 0 || board[0][i] != 0)
+				return false;
 		}
-		return false;
+		return true;
 	}
 	
 	
@@ -180,10 +180,22 @@ public class Algorithm6 extends Algo{ // Replace TeamName
 		int[][] newBoard = playMove(copyBoard(board), move);
 		int total = 0;
 		int max = -200;
-		if (freeMove) {
+		if (checkDone(newBoard)) {
+			if (!myTurn)
+				newBoard = swapBoard(newBoard);
+			max = 0;
+			for(int i = 0; i < 8; i++) {
+				max += newBoard[1][i];
+				max -= newBoard[0][i];
+			}
+			max -= newBoard[0][0];
+		} else if (freeMove) {
 			ArrayList<Integer> moves = findMoves(newBoard);
+			if (checkDone(newBoard)){
+				
+			}
 			for (int m : moves) {
-				int value = 1 + freeMoveHeuristic(copyBoard(newBoard), m, true, depth);
+				int value = 1 + freeMoveHeuristic(copyBoard(newBoard), m, myTurn, depth);
 				if (value > max)
 					max = value;
 			}
@@ -200,7 +212,7 @@ public class Algorithm6 extends Algo{ // Replace TeamName
 				//if(moves.size() == 0)
 				int theirMax = -100;
 				for (int m : moves) {
-					int value = freeMoveHeuristic(copyBoard(newBoard), m, true, depth);
+					int value = freeMoveHeuristic(copyBoard(newBoard), m, !myTurn, depth);
 					if (value > theirMax)
 						theirMax = value;
 				}
