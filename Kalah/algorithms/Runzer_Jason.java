@@ -13,7 +13,6 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 	static boolean freeMove = false;
 	static  int totalSeeds = 0;
 	static boolean stolen;
-	static int counter = 0;
 	
     public static String getTeamName(){
         return teamName;
@@ -30,22 +29,16 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
     **************************************************/
         int [][] board = game.getBoard();
         if(totalSeeds == 0){
-        	totalSeeds = board[0][1] * board[0].length - 2;
+        	totalSeeds = 2 * board[0][1] * (board[0].length - 2);
         }
-		printBoard(board);
-		int move = findBestMove(board);
-		System.out.println("You moved: " + move);
-		
-		int[][] boardCopy = new int[2][8];
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				boardCopy[i][j] = board[i][j];
-			}
-		}
-		System.out.println("Board before:");
-		printBoard(board);
-		System.out.println("Playing move: " + move);
-		printBoard(playMove(boardCopy,move));
+	printBoard(board);
+	int move = findBestMove(board);
+	System.out.println("You moved: " + move);
+	int[][] boardCopy = copyBoard(board);
+	System.out.println("Board before:");
+	printBoard(board);
+	System.out.println("Playing move: " + move);
+	printBoard(playMove(boardCopy,move));
         return String.valueOf(move);
     }
     
@@ -73,6 +66,7 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 		}
 		return moves;
 	}
+
 	/**
 	 * Helper method to swap the opponent and the current players board.
 	 */
@@ -83,7 +77,6 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 		}
 		for (int i = 0; i < board[0].length; i++) {
 			board[0][i] = board[1][board[0].length - 1 - i];
-
 		}
 		for (int i = 0; i < board[0].length; i++) {
 			board[1][i] = temp[board[0].length - i - 1];
@@ -99,7 +92,7 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 
 		boolean playLast = true;
 		int startSeeds = board[0][1];
-		for (int i = 1; i < 7; i++) {
+		for (int i = 1; i < board[0].length - 1; i++) {
 			if((board[0][i] != startSeeds) || (board[1][i] != startSeeds))
 				playLast = false;	
 		}
@@ -127,7 +120,7 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 	}
 	
 	public static boolean checkDone(int[][] board) {
-		for (int i = 1; i < 7; i++) {
+		for (int i = 1; i < board[0].length - 1; i++) {
 			if (board[1][i] != 0 || board[0][i] != 0)
 				return false;
 		}
@@ -152,12 +145,12 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 	}
 
 	public static int howCloseToWin(int[][] board) {
-		int value = board[1][7] - 19;
+		int value = board[1][board[0].length - 1] - (totalSeeds / 2 + 1);
 		return value;
 	}
 
 	public static int howFarAhead(int[][] board) {
-		return (board[1][7] - board[0][0]);
+		return (board[1][board[0].length -1] - board[0][0]);
 	}
 
 	public static int findHeuristic(int[][] board, int move, boolean myTurn, int depth) {
@@ -169,16 +162,13 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 			if (!myTurn)
 				newBoard = swapBoard(newBoard);
 			max = 0;
-			for(int i = 0; i < 8; i++) {
+			for(int i = 0; i < newBoard[0].length; i++) {
 				max += newBoard[1][i];
 				max -= newBoard[0][i];
 			}
 			max -= newBoard[0][0];
 		} else if (freeMove) {
 			ArrayList<Integer> moves = findMoves(newBoard);
-			if (checkDone(newBoard)){
-				
-			}
 			for (int m : moves) {
 				int value = 1 + findHeuristic(copyBoard(newBoard), m, myTurn, depth);
 				if (value > max)
@@ -194,7 +184,6 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 			if (depth >= 0) {
 				newBoard = swapBoard(newBoard);
 				ArrayList<Integer> moves = findMoves(newBoard);
-				//if(moves.size() == 0)
 				int theirMax = -100;
 				for (int m : moves) {
 					int value = findHeuristic(copyBoard(newBoard), m, !myTurn, depth);
@@ -210,8 +199,8 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 	}
 
 	public static int stealHeuristic(int[][] board, int[][] oldBoard) {
-		if (board[1][7] - oldBoard[1][7] > 1)
-			return board[1][7] - oldBoard[1][7];
+		if (board[1][board[0].length - 1] - oldBoard[1][board[0].length -1] > 1)
+			return board[1][board[0].length - 1] - oldBoard[1][board[0].length - 1];
 		else
 			return 0;
 	}
@@ -231,7 +220,6 @@ public class Runzer_Jason extends Algo{ // Replace TeamName
 		int currentIndex = move + 1;
 		freeMove = false;
 		stolen = false;
-
 		boolean right = true; // determines if we are still distributing the
 								// seeds in your houses
 		while (seeds > 0) {
